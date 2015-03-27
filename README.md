@@ -12,7 +12,7 @@ First, install [nvm](https://github.com/creationix/nvm). Then run the following:
 * `$ nvm use iojs`
 * `$ nvm alias default iojs` (to make `node` default to `iojs`)
 
-After that, clone the repo and install dependancies:
+After that, clone the repo and install dependencies:
 
 * `$ npm install`
 * `$ npm install -g gulp`
@@ -21,7 +21,9 @@ After that, clone the repo and install dependancies:
 
 * `$ gulp dev`
 
-Open your browser to `http://localhost:8080`. Try to disable JavaScript in your browser, you will still be able to navigate between and see the content. In addition, script and style changes will be injected on the fly for automatic hot reloading.
+Open your browser to `http://localhost:8080`. Now, disable JavaScript in your browser. You will still be able to navigate between and see the content! This is the power of isomorphic javascript. 
+
+Script and style changes will be injected on the fly for automatic hot reloading. Development now becomes 100x more fun ❤
 
 ### Building the project for production:
 
@@ -30,3 +32,12 @@ Running `$ gulp build` will produce the following tasks:
 * Concat & minify styles to `/dist/css/styles.css`
 * Concat & minify scripts to `/dist/js/app.js`
 * Optimize & copy images to `/dist/img/`
+
+## Future Plans
+
+* Incorporate Flux Architecture with Alt.js
+* Add bower for client-side
+* Minimal Flux Sample
+
+---
+[jancarloviray.com](www.jancarloviray.com) · [@jancarloviray](https://twitter.com/jancarloviray)
