@@ -38,6 +38,7 @@ Running `gulp build` will produce the following tasks:
 * Incorporate Flux Architecture with [Alt](https://github.com/goatslacker/alt)
 * Add [Bower](http://bower.io/) for client-side package management
 * Minimal Flux Sample
+* Unit Testing and Linting as part of build process
 * [SMACSS](https://smacss.com/) + [BEM](https://en.bem.info/) for CSS Architecture
 * [Docker](https://www.docker.com/)
 * Productionize
