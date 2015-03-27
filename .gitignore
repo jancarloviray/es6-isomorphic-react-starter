@@ -26,3 +26,11 @@ node_modules
 
 # Users Environment Variables
 .lock-wscript
+
+# Build Temp
+dist
+.tmp
+
+# Random
+.DS_Store
+npm-debug.log
