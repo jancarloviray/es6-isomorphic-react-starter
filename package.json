@@ -13,22 +13,28 @@
   "author": "Jan Carlo Viray <virayjancarlo@yahoo.com>",
   "license": "GNU",
   "dependencies": {
+    "alt": "^0.15.4",
     "babel": "^4.7.16",
     "babel-core": "^4.7.16",
     "babel-loader": "^4.2.0",
     "bootstrap": "^3.3.4",
     "express": "^4.12.3",
     "express-handlebars": "^2.0.0",
+    "iso": "^4.1.0",
+    "lodash": "^3.6.0",
     "normalize.css": "^3.0.2",
     "react": "^0.13.1",
     "react-router": "^0.13.2",
     "superagent": "^1.1.0"
   },
   "devDependencies": {
+    "babel-eslint": "^2.0.2",
     "browser-sync": "^2.4.0",
     "del": "^1.1.1",
+    "eslint": "^0.18.0",
     "gulp": "^3.8.11",
     "gulp-concat-css": "^2.1.2",
+    "gulp-eslint": "^0.8.0",
     "gulp-import-css": "^0.1.2",
     "gulp-less": "^3.0.2",
     "gulp-minify-css": "^1.0.0",
@@ -55,5 +61,8 @@
     "webpack",
     "express",
     "es6"
-  ]
+  ],
+  "engines": {
+    "iojs": "1.2.0"
+  }
 }

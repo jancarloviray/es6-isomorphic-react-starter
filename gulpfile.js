@@ -11,17 +11,43 @@ var minifyCSS = require('gulp-minify-css');
 var concatCss = require('gulp-concat-css');
 var proxy = require('proxy-middleware');
 var combiner = require('stream-combiner2');
+var eslint = require('gulp-eslint');
+var objectAssign = require('react/lib/Object.assign');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var webpackConfig = require('./webpack.config.js');
 // var imagemin = require('gulp-imagemin');
 // var pngquant = require('imagemin-pngquant');
 
+var CODE_FILES = [
+  'app/**/*.jsx',
+  'app/**/*.js',
+  'shared/**/*.js',
+  'server/**/*.jsx',
+  'server/**/*.js',
+];
+
 // SHARED TASKS
 
-gulp.task('clean', function () {
-  return del([__dirname + '/dist/**/*']);
+gulp.task('clean:img', function () {
+  return del([__dirname + '/dist/img/**/*']);
 });
+
+gulp.task('clean:css', function () {
+  return del([__dirname + '/dist/css/**/*']);
+});
+
+gulp.task('clean:js', function () {
+  return del([__dirname + '/dist/js/**/*']);
+});
+
+gulp.task('lint:code', function(){
+  return gulp.src(CODE_FILES)
+    .pipe(eslint({
+      useEslintrc: true
+    }))
+    .pipe(eslint.format());
+})
 
 // DEVELOPMENT TASKS
 
@@ -55,14 +81,14 @@ gulp.task('connect', function () {
   });
 });
 
-gulp.task('webpack-dev-server', function () {
-  var config = Object.create(webpackConfig);
-  config.devtool = 'eval';
+gulp.task('webpack-dev-server', ['clean:js'], function () {
+  var config = objectAssign({}, webpackConfig);
+  config.devtool = 'source-map';
   config.debug = true;
   config.entry = [
     'webpack-dev-server/client?http://localhost:8090',
     'webpack/hot/only-dev-server',
-    __dirname + '/app/main.jsx'
+    __dirname + '/app/index.js'
   ];
   config.module.loaders = [{
     test: /\.js/,
@@ -77,9 +103,17 @@ gulp.task('webpack-dev-server', function () {
   new WebpackDevServer(webpack(config), {
     publicPath: config.output.publicPath,
     hot: true,
-    info: false,
+    color: true,
+    stats: {
+      assets: true,
+      colors: true,
+      version: false,
+      hash: false,
+      timings: true,
+      chunks: false,
+      chunkModules: false
+    },
     watchDelay: 50,
-    stats: { colors: true },
     historyApiFallback: true
   }).listen(8090, 'localhost', function (err) {
     if (err) {
@@ -90,13 +124,13 @@ gulp.task('webpack-dev-server', function () {
 });
 
 gulp.task('supervisor', function () {
-  supervisor(__dirname + '/server/server.js', {
+  supervisor(__dirname + '/server/index.js', {
     watch: ['server'],
     extensions: ['jsx', 'js']
   });
 });
 
-// gulp.task('images', function () {
+// gulp.task('images', ['clean:img'] function () {
 //   var combined = combiner.obj([
 //     gulp.src(__dirname + '/app/images/**/*'),
 //     imagemin({
@@ -123,7 +157,7 @@ gulp.task('less', function () {
   return combined;
 });
 
-gulp.task('styles', ['less'], function () {
+gulp.task('styles', ['less','clean:css'], function () {
   var combined = combiner.obj([
     gulp.src(__dirname + '/.tmp/css/**/*.css'),
     concatCss('styles.css'),
@@ -135,7 +169,7 @@ gulp.task('styles', ['less'], function () {
 });
 
 gulp.task('dev', [
-  'clean',
+  'lint:code',
   // 'images',
   'styles',
   'supervisor',
@@ -143,13 +177,14 @@ gulp.task('dev', [
   'connect'
 ], function () {
   // gulp.watch(__dirname + '/app/images/**/*', ['images']);
+  gulp.watch(CODE_FILES, ['lint:code']);
   gulp.watch(__dirname + '/app/styles/**/*', ['styles']);
 });
 
 // BUILD TASKS
 
-gulp.task('webpack:build', function (callback) {
-  var config = Object.create(webpackConfig);
+gulp.task('webpack:build', ['clean:js'], function (callback) {
+  var config = objectAssign({}, webpackConfig);
   config.plugins = [
     new webpack.DefinePlugin({
       'process.env': {
@@ -157,7 +192,30 @@ gulp.task('webpack:build', function (callback) {
       }
     }),
     new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.UglifyJsPlugin()
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false,
+        screw_ie8: true,
+        sequences: true,
+        dead_code: true,
+        drop_debugger: true,
+        comparisons: true,
+        conditionals: true,
+        evaluate: true,
+        booleans: true,
+        loops: true,
+        unused: true,
+        hoist_funs: true,
+        if_return: true,
+        join_vars: true,
+        cascade: true,
+        drop_console: true
+      },
+      output: {
+        comments: false
+      },
+      sourceMap: false
+    })
   ];
 
   webpack(config, function (err, stats) {
@@ -177,4 +235,9 @@ gulp.task('build:styles', ['styles'], function () {
     .pipe(gulp.dest(__dirname + '/dist/css/'));
 });
 
-gulp.task('build', ['clean', 'build:styles', /*'images',*/ 'webpack:build']);
+gulp.task('build', [
+  'lint:code',
+  'build:styles',
+  /*'images',*/
+  'webpack:build'
+]);
