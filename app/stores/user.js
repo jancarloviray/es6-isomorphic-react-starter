@@ -9,7 +9,7 @@ class UserStore {
         this.users = [];
     }
     onAdd(user){
-        this.users.push(user);
+        this.users.unshift(user);
     }
     onRemove(index){
         this.users.splice(index, 1);

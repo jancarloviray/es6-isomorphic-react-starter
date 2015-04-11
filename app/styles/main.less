@@ -9,3 +9,40 @@ body {
   padding: 40px 15px;
   text-align: center;
 }
+.userList {
+    &-title{}
+    &-addUser {}
+    &-list {
+        list-style-type: 'none';
+        margin: 0;
+        padding: 0;
+    }
+}
+.userList-listItem {
+    border: 1px solid #FFFFFF;
+    float: left;
+    min-width: 300px;
+    max-width: 200px;
+    padding: 0px;
+    position: relative;
+    &-userInfo {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: #FFF;
+        opacity: 0;
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+    &-userContactDetails {
+        margin-left: 30px;
+    }
+    &-userName {
+        text-transform: capitalize;
+        text-align: center;
+        margin: 20px;
+    }
+}
