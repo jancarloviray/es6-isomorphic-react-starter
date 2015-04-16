@@ -17,8 +17,6 @@ export default (req, res) => {
     routes: routes,
     location: req.url,
     onAbort(redirect) {
-      // TODO: Try to render the good page with re-creating a Router,
-      // and with modifying req with `redirect.to`
       res.writeHead(303, {'Location': redirect.to});
       return res.send();
     },
@@ -39,6 +37,6 @@ export default (req, res) => {
         // render app
         return res.render('main', {content});
       }
-    );
+      );
   });
 };

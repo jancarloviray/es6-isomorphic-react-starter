@@ -1,13 +1,5 @@
 'use strict';
 
-// Tell `require` calls to look into `/app` also
-// it will avoid `../../../../../` require strings
-process.env.NODE_PATH = 'app';
-require('module').Module._initPaths();
-
-// Install `babel` hook
-require('babel/register');
-
 import path from 'path';
 import express from 'express';
 import exphbs from 'express-handlebars';

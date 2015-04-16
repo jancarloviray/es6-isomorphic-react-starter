@@ -12,10 +12,6 @@ export default React.createClass({
 	getInitialState() {
 		return UserStore.getState();
 	},
-    // this is not good for serverside.. causes document not found error
-    // componentWillMount(){
-        // this.listenTo(UserStore, () => this.setState(this.getInitialState()));
-    // },
     componentDidMount(){
         this.listenTo(UserStore, () => this.setState(this.getInitialState()));
     },
